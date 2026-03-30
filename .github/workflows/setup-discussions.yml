@@ -1,0 +1,51 @@
+name: Seadista Discussions kategooriad (avalik repo)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  discussions: write
+
+jobs:
+  setup-discussions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Loo kategooriad
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const repoId = context.payload.repository.node_id;
+
+            const categories = [
+              { name: 'Pingirida', emoji: '🏆', description: 'Igapäevane anonüümne seis — kes on mitu protsenti saanud', format: 'OPEN' },
+              { name: 'Teadaanded', emoji: '📢', description: 'Maria teadaanded — tähtajad, muudatused, juhised', format: 'OPEN' },
+              { name: 'Üldine', emoji: '💬', description: 'Üldised küsimused ja arutelu', format: 'OPEN' }
+            ];
+
+            for (const cat of categories) {
+              try {
+                await github.graphql(`
+                  mutation($repoId: ID!, $name: String!, $emoji: String!, $description: String!, $format: DiscussionCategoryFormat!) {
+                    createDiscussionCategory(input: {
+                      repositoryId: $repoId,
+                      name: $name,
+                      emoji: $emoji,
+                      description: $description,
+                      isAnswerable: false,
+                      format: $format
+                    }) {
+                      discussionCategory { id name }
+                    }
+                  }
+                `, {
+                  repoId,
+                  name: cat.name,
+                  emoji: cat.emoji,
+                  description: cat.description,
+                  format: cat.format
+                });
+                console.log(`✅ Loodud: ${cat.name}`);
+              } catch (e) {
+                console.log(`⚠️ ${cat.name}: ${e.message}`);
+              }
+            }
