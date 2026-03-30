@@ -10,7 +10,8 @@
 
 | | |
 |---|---|
-| **Kestus** | 1 õppenädal (34 tundi, E-R) |
+| **Kestus** | 4 päeva (E-N), 32 akadeemilist tundi |
+| **Tähtaeg** | 30.04.2026 23:59 |
 | **Praktiline** | Linux server + MySQL andmebaas + backup |
 | **Disain** | Süsteemiarhitektuur, võrk, riistvara, UI, SLA, dokumentatsioon |
 | **Tööriistad** | GitHub, MySQL, Ubuntu, diagrams.net, Figma |
